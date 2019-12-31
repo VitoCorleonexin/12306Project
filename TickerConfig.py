@@ -44,8 +44,8 @@ is_more_ticket = True
 ticket_people = ['王文鑫', '孟冉']
 
 # 12306登录账号
-user = "18601992579"
-pwd = "wwxmr18601992579wwx"
+user = ""
+pwd = ""
 
 # 加入小黑屋时间默认为5分钟，此功能为了防止僵尸票导致一直下单不成功错过正常的票
 ticket_black_list_time = 5
