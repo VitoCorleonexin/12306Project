@@ -61,9 +61,72 @@ host = "120.77.154.140:8000"
 req_url = "/verify/base64/"
 http_type = "http"
 
-# host = "12306.yinaoxiong.cn"
+# host = "12306.yinaoxiong.cn" # spare server 
 # req_url = "/verify/base64"
 # http_type = "https"
 
 # setting up email
-# email: xxx
+# email: xxx@sina.com
+# notice_email_list: "123@qq.com"
+# username: xxx
+# password: pwd
+# host: smpt.sina.com
+
+email_conf= {
+    "is_mail": True,
+    "email": "",
+    "notice_email_list: "",
+    "username": "",
+    "password": "",
+    "host": "",
+    }
+ 
+ # 是否开启 server酱 微信提醒， 使用前需要前往 http://sc.ftqq.com/3.version 扫码绑定获取 SECRET 并关注获得抢票结果通知的公众号
+ server_chan_conf = {
+     "is_server_chan": False,
+     "secret": "",
+     }
+ 
+ # cdn searching 1:opend 2:closed
+ is_cdn = 1
+ 
+ # two type of odering 1 模拟网页自动捡漏下单（不稳定），2 模拟车次后面的购票按钮下单（稳如老狗）
+ order_type = 2
+ 
+ # 下单模式 1 为预售，整点刷新，刷新间隔0.1-0.5S, 然后会校验时间，比如12点的预售，那脚本就会在12.00整检票，刷新订单
+#         2 是捡漏，捡漏的刷新间隔时间为0.5-3秒，时间间隔长，不容易封ip
+order_model = 1
+
+# 是否开启代理, 0代表关闭， 1表示开始
+# 开启此功能的时候请确保代理ip是否可用，在测试放里面经过充分的测试，再开启此功能，不然可能会耽误你购票的宝贵时间
+# 使用方法：
+# 1、在agency/proxy_list列表下填入代理ip
+# 2、测试UnitTest/TestAll/testProxy 测试代理是否可以用
+# 3、开启代理ip
+is_proxy = 0
+
+# 预售放票时间, 如果是捡漏模式，可以忽略此操作
+open_time = "12:59:57"
+
+# 1=>为一直随机ua,2->只启动的时候随机一次ua
+random_agent = 2
+
+passenger_ticker_str = {
+    '一等座': 'M',
+    '特等座': 'P',
+    '二等座': 'O',
+    '商务座': 9,
+    '硬座': 1,
+    '无座': 1,
+    '软座': 2,
+    '软卧': 4,
+    '硬卧': 3,
+    }
+
+
+max_time = 3
+min_time = 1
+
+
+#software version
+re_version = "1.2.004"
