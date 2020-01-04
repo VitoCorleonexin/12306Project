@@ -56,7 +56,7 @@ is_auto_code = True
 # 设置2本地自动打码，需要配置tensorflow和keras库，3为云打码  
 auto_code_type = 3
 
-#cloud printing server's address :
+# cloud printing server's address :
 host = "120.77.154.140:8000"
 req_url = "/verify/base64/"
 http_type = "http"
