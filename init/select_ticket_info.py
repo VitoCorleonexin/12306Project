@@ -1,9 +1,13 @@
+from agency.cdn_utils import open_cdn_file
+
+
 class Select:
+
     """
     quick buying channel
     """
     
-    __init__(self):
+    def __init__(self):
         self.cdn_list = open_cdn_file("filter_cdn_list")
 
 

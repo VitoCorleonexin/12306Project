@@ -1,6 +1,7 @@
 import requests
 from collections import OrderedDict
-from agency.agency_tools import proxy
+from agency.agency_tools import Proxy
+
 
 def _set_header_default():
     header_dict = OrderedDict()
@@ -30,23 +31,23 @@ class HTTPClient(object):
         """
         cdn_list 切换不包括查询的cdn，防止查询cdn污染登陆和下单cdn
         """
-        self.initS()
+        self.init_s()
         self._cdn = None
         self.cdn_list = cdn_list
         self._proxies = None
         if is_proxy is 1:
-            self.proxy = proxy()
+            self.proxy = Proxy()
             self._proxies = self.proxy.setProxy()
              # print(u"设置当前代理ip为 {}, 请注意代理ip是否可用！！！！！请注意代理ip是否可用！！！！！请注意代理ip是否可用！！！！！".format(self._proxies))
 
-    def initS(self):
+    def init_s(self):
         self._s = requests.Session()
         self._s.headers.update(_set_header_default())
         return self
     
     def set_cookies(self, kwargs):
         """
-        Seting cookies
+        Setting cookies
         :param kwargs:
         :return :
         
@@ -55,8 +56,7 @@ class HTTPClient(object):
         for kwarg in kwargs:
             for k, v in kwarg.items():
                 self._s.cookies.set(k, v)
-                
-                
+
     def get_cookies(self):
         
         """
@@ -65,8 +65,7 @@ class HTTPClient(object):
         """
         
         return self._s.cookies.values()
-    
-    
+
     def del_cookies(self):
         
         """
@@ -74,9 +73,8 @@ class HTTPClient(object):
         :return:
         """
         
-        self._s_cookies.clear()
-        
-        
+        self._s.cookies.clear()
+
     def del_cookies_by_key(self, key):
         
         """
@@ -84,42 +82,32 @@ class HTTPClient(object):
         :return:
         """
         
-        self._s_cookies.set(key, None)
-        
-    
+        self._s.cookies.set(key, None)
+
     def set_headers(self, headers):
         self._s.headers.update(headers)
         return self
-    
-    
+
     def reset_headers(self):
         self._s.headers.clear()
         self._s.headers.update(_set_header_default())
-        
-    
+
     def get_headers_host(self):
         return self._s.headers['Host']
-    
-    
+
     def set_headers_host(self, host):
         self._s.headers.update({'Host': host})
         return self
-    
-    
+
     def set_headers_user_agent(self):
         self._s.headers.update({"User-Agent": _set_user_agent()})
-        
-    
+
     def get_headers_user_agent(self):
         return self._s.headers["User-Agent"]
-    
-    
+
     def get_headers_referer(self):
         return self._s.headers["Referer"]
-    
-    
+
     def set_headers_referer(self, referer):
         self._s.headers.update({"Referer": referer})
         return self
-        
-        
