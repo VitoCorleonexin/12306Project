@@ -1,6 +1,10 @@
 import requests
 from collections import OrderedDict
 from agency.agency_tools import Proxy
+import TickerConfig
+from config import logger
+from time import sleep
+import json
 
 
 def _set_header_default():
@@ -111,3 +115,74 @@ class HTTPClient(object):
     def set_headers_referer(self, referer):
         self._s.headers.update({"Referer": referer})
         return self
+    
+    @property
+    def cdn(self):
+        return self._cdn
+    
+    @cdn.setter
+    def cdn(self, cdn):
+        self._cdn = cdn
+    
+    
+    def send(self, urls, data=None, **kwargs):
+        """
+        send request to url. if response 200, return response, else return None.
+        """
+        allow_redirects = False
+        is_logger = urls.get('is_logger', False)
+        req_url = urls.get('req_url', '')
+        re_try = urls.get('re_try', '')
+        s_time = urls.get('s_time', 0)
+        is_cdn = urls.get('is_cdn', False)
+        is_test_cdn = urls.get('is_test_cdn', False)
+        error_data = {'code': 99999, 'message': 'reached limits'}
+        if data:
+            method = 'post'
+            self.set_headers({"Content-Length": f"{len(data)}"})
+        else:
+            method = 'get'
+            self.reset_headers()
+        if TickerConfig.random_agent is 1:
+            self.set_headers_user_agent()
+        self.set_headers_referer(urls["Referer"])
+        if is_logger:
+            logger.log(f'url: {req_url}\n param: {data}\n reqeust type: {method}')
+        self.set_headers_host(urls['Host'])
+        if is_test_cdn:
+            url_host = self._cdn
+        elif is_cdn:
+            if self._cdn:
+                url_host = self._cdn
+            else:
+                url_host = urls['Host']
+        else:
+            url_host = ulrs['Host']
+        
+        for i in range(re_try):
+            try:
+                sleep(s_time)
+                try:
+                    requests.packages.urllib3.disable_warnings()
+                except:
+                    pass
+                response = self._s.request(method=method,
+                                           timeout=5,
+                                           proxies=self._proxies,
+                                           url=http + "://" + url_host + req_url,
+                                           data=data,
+                                           allow_redirects=allow_redirects,
+                                           verify=False,
+                                           **kwargs)
+                if response.status_code == 200 or response.status_code == 302:
+                    if urls.get('not_decode', False):
+                        return response.content
+                    if response.content:
+                        if is_logger:
+                            logger.log(u'出参 :{0}'.format(response.content.decode()))
+                        if urls['is_json']:
+                            return json.loads(response.content.decode())
+                            
+            
+            
+        
