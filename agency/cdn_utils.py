@@ -28,7 +28,8 @@ class CDNProxy(threading.Thread):
             start_time = datetime.datetime.now()
             rep = http.send(url)
             # millisecond
-            ret_time = (datetime.datetime.now() - start_time).microseconds / 1000
+            ret_time = (datetime.datetime.now() - start_time).
+            microseconds / 1000
             if rep and 'message' not in rep and ret_time < 3000:
                 if cdn.replace("\n", "") not in cdn_list:
                     print("added cdn:{}".format(cdn))
@@ -89,7 +90,8 @@ def filter_cdn():
     print("currently available cdn: {}".format(len(cdn_list)))
     if cdn_list:
         ips = sort_cdn()
-        path = os.path.join(os.path.dirname(__file__), f'../filter_cdn_list')
+        path = os.path.join(os.path.dirname(__file__), f'../filter_'
+        'cdn_list')
         f = open(path, "a+")
         f.seek(0)
         f.truncate()

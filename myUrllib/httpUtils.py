@@ -5,14 +5,16 @@ import TickerConfig
 from config import logger
 from time import sleep
 import json
-
+import random
+import socket
 
 def _set_header_default():
     header_dict = OrderedDict()
     # header_dict["Accept"] = "application/json, text/plain, */*"
     header_dict["Accept-Encoding"] = "gzip, deflate"
     header_dict["User-Agent"] = _set_user_agent()
-    header_dict["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
+    header_dict["Content-Type"] = "application/x-www-form-urlencoded;" 
+    "charset=UTF-8"
     header_dict["Origin"] = "https://kyfw.12306.cn"
     header_dict["Connection"] = "keep-alive"
     return header_dict
@@ -24,9 +26,11 @@ def _set_user_agent():
     #     return user_agent
     # except:
     #     print("请求头设置失败，使用默认请求头")
-    #     return 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.' + str(
+    #     return 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) Apple
+    #WebKit/537.36 (KHTML, like Gecko) Chrome/75.0.' + str(
     #         random.randint(5000, 7000)) + '.0 Safari/537.36'
-    return "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+    return "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36"
+    " (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
 
 
 class HTTPClient(object):
@@ -42,7 +46,9 @@ class HTTPClient(object):
         if is_proxy is 1:
             self.proxy = Proxy()
             self._proxies = self.proxy.setProxy()
-             # print(u"设置当前代理ip为 {}, 请注意代理ip是否可用！！！！！请注意代理ip是否可用！！！！！请注意代理ip是否可用！！！！！".format(self._proxies))
+             # print(u"设置当前代理ip为 {}, 请注意代理ip是否可用！！！！！请注意
+             #代理ip是否可用！！！！！请注意代理ip是否可用！！！！！".
+             #format(self._proxies))
 
     def init_s(self):
         self._s = requests.Session()
@@ -127,7 +133,8 @@ class HTTPClient(object):
     
     def send(self, urls, data=None, **kwargs):
         """
-        send request to url. if response 200, return response, else return None.
+        send request to url. if response 200, return response, else 
+        return None.
         """
         allow_redirects = False
         is_logger = urls.get('is_logger', False)
@@ -147,7 +154,8 @@ class HTTPClient(object):
             self.set_headers_user_agent()
         self.set_headers_referer(urls["Referer"])
         if is_logger:
-            logger.log(f'url: {req_url}\n param: {data}\n reqeust type: {method}')
+            logger.log(f'url: {req_url}\n param: {data}\n reqeust type:' 
+            '{method}')
         self.set_headers_host(urls['Host'])
         if is_test_cdn:
             url_host = self._cdn
@@ -161,6 +169,7 @@ class HTTPClient(object):
         
         for i in range(re_try):
             try:
+                
                 sleep(s_time)
                 try:
                     requests.packages.urllib3.disable_warnings()
@@ -169,20 +178,52 @@ class HTTPClient(object):
                 response = self._s.request(method=method,
                                            timeout=5,
                                            proxies=self._proxies,
-                                           url=http + "://" + url_host + req_url,
+                                           url=http + "://" + url_host
+                                            + req_url,
                                            data=data,
-                                           allow_redirects=allow_redirects,
+                                           allow_redirects=
+                                           allow_redirects,
                                            verify=False,
                                            **kwargs)
-                if response.status_code == 200 or response.status_code == 302:
+                if response.status_code == 200 or response.status_code
+                 == 302:
                     if urls.get('not_decode', False):
                         return response.content
                     if response.content:
                         if is_logger:
-                            logger.log(u'出参 :{0}'.format(response.content.decode()))
+                            logger.log(u'出参 :{0}'.format(response.
+                            content.decode()))
                         if urls['is_json']:
-                            return json.loads(response.content.decode())
-                            
+                            return json.loads(response.content.decode()
+                                              if isinstance(
+                                              response.content, bytes)
+                                              else response.content)
+                        else:
+                            retrun response.content.decode('utf-8', 
+                            'ignore') if
+                            isinstance(response.content, bytes) else
+                             response.content
+                    else:
+                        print(f"{urls['req_url']} return empty, "
+                        "interface status code: {response.status_code}")
+                        logger.log(f"url: urls['req_url'] "
+                        "returns empty")
+                        if self.cdn_list:
+                            # 如果下单或者登陆出现cdn 302的情况，立马切换cdn
+                            url_host = self.cdn_list.pop
+                            (random.randint(0, 4))
+                        continue
+               else:
+                   sleep(urls["re_time"])
+        
+            except(requests.exceptions.Timeout, requests.exceptions.
+            ReadTimeout,
+            requests.exceptions.ConnectionError):
+                pass
+            except socket.error:
+                pass
+        return error_data                
+                                            
             
             
         
