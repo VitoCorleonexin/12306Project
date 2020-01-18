@@ -72,28 +72,28 @@ http_type = "http"
 # password: pwd
 # host: smpt.sina.com
 
-email_conf= {
+email_conf = {
     "is_mail": True,
     "email": "",
-    "notice_email_list: "",
+    "notice_email_list": "",
     "username": "",
     "password": "",
     "host": "",
     }
  
- # 是否开启 server酱 微信提醒， 使用前需要前往 http://sc.ftqq.com/3.version 扫码绑定获取 SECRET 并关注获得抢票结果通知的公众号
- server_chan_conf = {
+# 是否开启 server酱 微信提醒， 使用前需要前往 http://sc.ftqq.com/3.version 扫码绑定获取 SECRET 并关注获得抢票结果通知的公众号
+server_chan_conf = {
      "is_server_chan": False,
      "secret": "",
      }
  
- # cdn searching 1:opend 2:closed
- is_cdn = 1
+# cdn searching 1:opend 2:closed
+is_cdn = 1
  
- # two type of odering 1 模拟网页自动捡漏下单（不稳定），2 模拟车次后面的购票按钮下单（稳如老狗）
- order_type = 2
+# two type of odering 1 模拟网页自动捡漏下单（不稳定），2 模拟车次后面的购票按钮下单（稳如老狗）
+order_type = 2
  
- # 下单模式 1 为预售，整点刷新，刷新间隔0.1-0.5S, 然后会校验时间，比如12点的预售，那脚本就会在12.00整检票，刷新订单
+# 下单模式 1 为预售，整点刷新，刷新间隔0.1-0.5S, 然后会校验时间，比如12点的预售，那脚本就会在12.00整检票，刷新订单
 #         2 是捡漏，捡漏的刷新间隔时间为0.5-3秒，时间间隔长，不容易封ip
 order_model = 1
 
@@ -124,7 +124,8 @@ CHROME_CHROME_PATH = "/opt/google/chrome/google-chrome"
 RAIL_EXPIRATION = ""
 RAIL_DEVICEID = ""
 # RAIL_EXPIRATION = "1577034103293"
-# RAIL_DEVICEID = "CDno29Erc_Pf3FSXb4dzq-Op64EhWrsi5yUZKVIKR1MAfYo2qFlCeXD8VkexY7_1qg-ClV-fE8j9jgVlPZxRh3wVc2iqLe_5A8sdr62qZx4B22JPF8lFCjpgTKZ5ODW90HJd5tiQsJ1KR9nOqHRxHj1FT5LEIwfw"
+# RAIL_DEVICEID = "CDno29Erc_Pf3FSXb4dzq-Op64EhWrsi5yUZKVIKR1MAfYo2qFlCeXD8VkexY7_1qg-ClV"
+# "-fE8j9jgVlPZxRh3wVc2iqLe_5A8sdr62qZx4B22JPF8lFCjpgTKZ5ODW90HJd5tiQsJ1KR9nOqHRxHj1FT5LEIwfw"
 
 
 # 1=>为一直随机ua,2->只启动的时候随机一次ua
@@ -146,6 +147,5 @@ passenger_ticker_str = {
 max_time = 3
 min_time = 1
 
-
-#software version
+# software version
 re_version = "1.2.004"
